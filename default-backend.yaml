@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: default-backend
+  name: default-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: default-backend
+  template:
+    metadata:
+      labels:
+        run: default-backend
+    spec:
+      volumes:
+      - name: data
+        emptyDir: {}
+      initContainers:
+      - name: init-container
+        image: busybox
+        volumeMounts:
+        - name: data
+          mountPath: "/data"
+        command: ["/bin/sh", "-c", 'echo "<h1><font color=blue>Oops.... this is the default backend </font></h1>" > /data/index.html']
+      containers:
+      - image: nginx
+        name: default-backend
+        volumeMounts:
+        - name: data
+          mountPath: "/usr/share/nginx/html"

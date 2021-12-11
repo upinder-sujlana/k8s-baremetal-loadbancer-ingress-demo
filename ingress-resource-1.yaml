@@ -1,0 +1,29 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-resource-1
+spec:
+  defaultBackend:
+    service:
+      name: default-backend-svc
+      port:
+        number: 80
+  rules:
+  - host: hxdemo-svc.example.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: hxdemo-svc
+            port:
+              number: 8080
+      - path: /hello
+        pathType: Prefix
+        backend:
+          service:
+            name: hello-server-svc
+            port:
+              number: 80
+  ingressClassName: nginx #IMPORTANT
